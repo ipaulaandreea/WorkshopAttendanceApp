@@ -1,9 +1,6 @@
 package WorkshopAttendanceApp;
-
 import java.util.List;
 import java.util.Scanner;
-
-
 
 
 
@@ -28,7 +25,7 @@ public class Main {
     }
 
     private static void addNewGuest(Scanner sc, GuestsList list) {
-        System.out.println("Se adauga o noua persoana…");
+        System.out.println("Se adauga o noua persoana...");
         System.out.println("Introduceti numele de familie:");
         String lastName = sc.nextLine();
         System.out.println("Introduceti prenumele:");
@@ -70,7 +67,7 @@ public class Main {
     }
 
     private static void removeGuest(Scanner sc, GuestsList list) {
-        System.out.println("Se sterge o persoana existenta din lista…");
+        System.out.println("Se sterge o persoana existenta din lista...");
         System.out.println("Alege modul de autentificare, tastand:");
         System.out.println("\"1\" - Nume si prenume");
         System.out.println("\"2\" - Email");
@@ -89,26 +86,25 @@ public class Main {
             String firstName = sc.nextLine();
             String lastName = sc.nextLine();
             list.remove(firstName, lastName);
-            System.out.println("Stergerea persoanei s-a realizat cu succes.");
+
 
         } if (choice == 2){
             System.out.println("Introduceti email:");
             String email = sc.nextLine();
             list.remove(2, email);
-            System.out.println("Stergerea persoanei s-a realizat cu succes.");
+
 
         } if (choice == 3) {
             System.out.println("Introduceti numarul de telefon:");
             String phoneNumber = sc.nextLine();
             list.remove(3, phoneNumber);
-            System.out.println("Stergerea persoanei s-a realizat cu succes.");
 
         }
 
     }
 
     private static void updateGuest(Scanner sc, GuestsList list) {
-        System.out.println("Se actualizeaza detaliile unei persoane…");
+        System.out.println("Se actualizeaza detaliile unei persoane...");
         System.out.println("Alege modul de autentificare, tastand:");
         System.out.println("\"1\" - Nume si prenume");
         System.out.println("\"2\" - Email");
@@ -168,14 +164,12 @@ public class Main {
             if (updateChoice == 3) {
                 System.out.println("Introduceti adresa de emai:");
                 String newEmail = sc.nextLine();
-
                 found.setEmail(newEmail);
             }
 
             if (updateChoice == 4) {
                 System.out.println("Introduceti numarul de telefon:");
                 String newPhone = sc.nextLine();
-
                 found.setPhoneNumber(newPhone);
             }
         }
@@ -183,17 +177,15 @@ public class Main {
     }
 
     private static void searchList(Scanner sc, GuestsList list) {
-        System.out.println("Inside searchList");
         String word = sc.nextLine();
         List<Guest> matches = list.partialSearch(word);
         if (matches.isEmpty()){
-            System.out.println("Nothing found");
+                System.out.println("Eroare: Persoana nu este inscrisa la eveniment.");
         } else {
             for (Guest guest : matches){
                 System.out.println(guest.toString());
             }
         }
-        // TO DO:
 
     }
 
