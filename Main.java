@@ -39,28 +39,33 @@ public class Main {
 
     private static void checkGuest(Scanner sc, GuestsList list) {
         int choice;
+
         do {
             choice = sc.nextInt();
+            sc.nextLine();
             if (choice < 1 || choice > 3) {
                 System.out.println("Nothing found");
             }
         } while (choice < 1 || choice > 3);
 
+
+
         if (choice == 1) {
-
             String firstName = sc.nextLine();
-
             String lastName = sc.nextLine();
-            list.search(firstName, lastName);
+             Guest found = list.search(firstName, lastName);
+             System.out.println(found.toString());
+
 
         } else if (choice == 2){
-
             String email = sc.nextLine();
-            list.search(2, email);
-        } else {
+            Guest found = list.search(choice, email);
+            System.out.println(found.toString());
 
+        } else {
             String phoneNumber = sc.nextLine();
-            list.search(3, phoneNumber);
+             Guest found = list.search(choice, phoneNumber);
+            System.out.println(found.toString());
         }
 
 
@@ -78,7 +83,6 @@ public class Main {
                 System.out.println("Nothing found.");
                 return;
             }
-
 
         if (choice == 1) {
             System.out.println("Introduceti prenume si nume de familie:");
@@ -120,13 +124,14 @@ public class Main {
             System.out.println("Introduceti numele de familie:");
             String lastName = sc.nextLine();
             System.out.println("Introduceti prenumele:");
-            String firstName = sc.nextLine();found = list.search(firstName, lastName);
+            String firstName = sc.nextLine();
+            found = list.search(firstName, lastName);
 
 
         } if (choice == 2){
             System.out.println("Introduceti adresa de email:");
             String email = sc.nextLine();
-            found = list.search(2, email);
+            found = list.search(choice, email);
 
 
         } if (choice == 3) {
@@ -180,7 +185,7 @@ public class Main {
         String word = sc.nextLine();
         List<Guest> matches = list.partialSearch(word);
         if (matches.isEmpty()){
-                System.out.println("Eroare: Persoana nu este inscrisa la eveniment.");
+                System.out.println("Nothing found");
         } else {
             for (Guest guest : matches){
                 System.out.println(guest.toString());

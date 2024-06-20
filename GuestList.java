@@ -12,7 +12,6 @@ import java.util.ArrayList;
 
     public GuestsList(int guestsCapacity) {
         this.guestsCapacity = guestsCapacity;
-        // TO DO:
     }
 
     public int add(Guest g) {
@@ -50,25 +49,34 @@ import java.util.ArrayList;
                 return guest;
             }
         }
-        return null;
 
+        for (Guest guest : waitingList) {
+            if (guest.getFirstName().equalsIgnoreCase(firstName) && guest.getLastName().equalsIgnoreCase(lastName)) {
+                return guest;
+            }
+        }
+
+        return null;
     }
 
 
     public Guest search(int opt, String match) {
+
         for (Guest guest : guests) {
-            if (opt == 3) {
-                if (guest.getPhoneNumber().equals(match)) {
-                    return guest;
-                }
-            } else if (opt == 2) {
-                if (guest.getEmail().equals(match)) {
-                    return guest;
-                }
+            if ((opt == 3 && guest.getPhoneNumber().equals(match)) ||
+                    (opt == 2 && guest.getEmail().equals(match))) {
+                return guest;
             }
         }
-        return null;
 
+        for (Guest guest : waitingList) {
+            if ((opt == 3 && guest.getPhoneNumber().equals(match)) ||
+                    (opt == 2 && guest.getEmail().equals(match))) {
+                return guest;
+            }
+        }
+
+        return null;
     }
 
     public boolean remove(String firstName, String lastName) {
@@ -178,20 +186,32 @@ import java.util.ArrayList;
     }
 
 
-    public List<Guest> partialSearch(String match) {
-        List<Guest> matches = new ArrayList<>();
-        String lowerCaseMatch = match.toLowerCase();
-        System.out.println("Inside partial search");
-        for (Guest guest : guests) {
-            if (guest.getFirstName().toLowerCase().contains(lowerCaseMatch) ||
-                    guest.getLastName().toLowerCase().contains(lowerCaseMatch) ||
-                    guest.getEmail().toLowerCase().contains(lowerCaseMatch) ||
-                    guest.getPhoneNumber().toLowerCase().contains(lowerCaseMatch)) {
-                matches.add(guest);
-            }
-        }
-        return matches;
-    }
+     public List<Guest> partialSearch(String match) {
+         List<Guest> matches = new ArrayList<>();
+         String lowerCaseMatch = match.toLowerCase();
+
+         // Search in guests list
+         for (Guest guest : guests) {
+             if (guest.getFirstName().toLowerCase().contains(lowerCaseMatch) ||
+                     guest.getLastName().toLowerCase().contains(lowerCaseMatch) ||
+                     guest.getEmail().toLowerCase().contains(lowerCaseMatch) ||
+                     guest.getPhoneNumber().toLowerCase().contains(lowerCaseMatch)) {
+                 matches.add(guest);
+             }
+         }
+
+         // Search in waiting list
+         for (Guest guest : waitingList) {
+             if (guest.getFirstName().toLowerCase().contains(lowerCaseMatch) ||
+                     guest.getLastName().toLowerCase().contains(lowerCaseMatch) ||
+                     guest.getEmail().toLowerCase().contains(lowerCaseMatch) ||
+                     guest.getPhoneNumber().toLowerCase().contains(lowerCaseMatch)) {
+                 matches.add(guest);
+             }
+         }
+
+         return matches;
+     }
 
 
     @Override

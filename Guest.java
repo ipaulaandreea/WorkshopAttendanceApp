@@ -1,6 +1,4 @@
 package WorkshopAttendanceApp;
-
-
 import java.util.Objects;
 
 public class Guest {
@@ -75,6 +73,7 @@ public class Guest {
     }
 
     public String fullName() {
+
         return this.lastName + " " + this.firstName;
     }
 }
