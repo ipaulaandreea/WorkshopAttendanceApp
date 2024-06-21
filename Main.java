@@ -1,7 +1,8 @@
 package WorkshopAttendanceApp;
 import java.util.List;
 import java.util.Scanner;
-
+import java.util.regex.Pattern;
+import java.util.regex.Matcher;
 
 
 public class Main {
@@ -24,16 +25,46 @@ public class Main {
         System.out.println("quit         - Inchide aplicatia");
     }
 
+    private static boolean isValidEmail (String email){
+        String emailRegex = "^[A-Za-z0-9+_.-]+@(.+)$";
+        Pattern pattern = Pattern.compile(emailRegex);
+        Matcher matcher = pattern.matcher(email);
+        return matcher.matches();
+    }
+
+    private static boolean isValidPhoneNumber (String phoneNumber){
+        String phoneRegex = "^\\+40\\d{9}$";
+        Pattern pattern = Pattern.compile(phoneRegex);
+        Matcher matcher = pattern.matcher(phoneNumber);
+        return matcher.matches();
+    }
+
     private static void addNewGuest(Scanner sc, GuestsList list) {
+        String email;
+        String phoneNumber;
         System.out.println("Se adauga o noua persoana...");
         System.out.println("Introduceti numele de familie:");
         String lastName = sc.nextLine();
         System.out.println("Introduceti prenumele:");
         String firstName = sc.nextLine();
-        System.out.println("Introduceti email:");
-        String email = sc.nextLine();
-        System.out.println("Introduceti numar de telefon (format „+40733386463“):");
-        String phoneNumber = sc.nextLine();
+
+        do {
+            System.out.println("Introduceti email:");
+            email = sc.nextLine();
+            if (!isValidEmail(email)){
+                System.out.println("Adresa email invalida");
+            }
+        } while (!isValidEmail(email));
+
+        do {
+            System.out.println("Introduceti numar de telefon (format „+40733386463“):");
+            phoneNumber = sc.nextLine();
+            if (!isValidPhoneNumber(phoneNumber)){
+                System.out.println("Numar de telefon invalid");
+            }
+        } while (!isValidPhoneNumber(phoneNumber));
+
+
         list.add(new Guest(lastName, firstName, email, phoneNumber));
     }
 
@@ -41,34 +72,40 @@ public class Main {
         int choice;
 
         do {
+            System.out.println("Alege modul de verificare, tastand:");
+            System.out.println("\"1\" - Nume si prenume");
+            System.out.println("\"2\" - Email");
+            System.out.println("\"3\" - Numar de telefon (format \"+40733386463\")");
             choice = sc.nextInt();
             sc.nextLine();
             if (choice < 1 || choice > 3) {
-                System.out.println("Nothing found");
+                System.out.println("Optiune invalida");
             }
         } while (choice < 1 || choice > 3);
 
-
+        Guest found = null;
 
         if (choice == 1) {
+            System.out.println("Introduceti prenumele:");
             String firstName = sc.nextLine();
+            System.out.println("Introduceti numele de familie:");
             String lastName = sc.nextLine();
-             Guest found = list.search(firstName, lastName);
-             System.out.println(found.toString());
-
-
+            found = list.search(firstName, lastName);
         } else if (choice == 2){
+            System.out.println("Introduceti email:");
             String email = sc.nextLine();
-            Guest found = list.search(choice, email);
-            System.out.println(found.toString());
-
+            found = list.search(choice, email);
         } else {
+            System.out.println("Introduceti numarul de telefon:");
             String phoneNumber = sc.nextLine();
-             Guest found = list.search(choice, phoneNumber);
-            System.out.println(found.toString());
+            found = list.search(choice, phoneNumber);
         }
 
-
+        if (found != null) {
+            System.out.println(found.toString());
+        } else {
+            System.out.println("No match found");
+        }
     }
 
     private static void removeGuest(Scanner sc, GuestsList list) {
@@ -79,30 +116,35 @@ public class Main {
         System.out.println("\"3\" - Numar de telefon (format \"+40733386463\")");
         int choice = sc.nextInt();
         sc.nextLine();
+        boolean removed = false;
         if (choice < 1 || choice > 3) {
-                System.out.println("Nothing found.");
+                System.out.println("Optiune invalida");
                 return;
             }
 
         if (choice == 1) {
-            System.out.println("Introduceti prenume si nume de familie:");
+            System.out.println("Introduceti prenumele si numele de familie:");
 
             String firstName = sc.nextLine();
             String lastName = sc.nextLine();
-            list.remove(firstName, lastName);
+            removed = list.remove(firstName, lastName);
 
 
         } if (choice == 2){
             System.out.println("Introduceti email:");
             String email = sc.nextLine();
-            list.remove(2, email);
+            removed = list.remove(2, email);
 
 
         } if (choice == 3) {
             System.out.println("Introduceti numarul de telefon:");
             String phoneNumber = sc.nextLine();
-            list.remove(3, phoneNumber);
+            removed = list.remove(3, phoneNumber);
 
+        }
+
+        if (!removed) {
+            System.out.println("Eroare: Persoana nu este inscrisa la eveniment.");
         }
 
     }
@@ -117,7 +159,7 @@ public class Main {
         sc.nextLine();
         Guest found = null;
         if (choice < 1 || choice > 3) {
-            System.out.println("Nothing found");
+            System.out.println("Optiune invalida");
             }
 
         if (choice == 1) {
@@ -167,7 +209,7 @@ public class Main {
                 found.setFirstName(newFirstName);
             }
             if (updateChoice == 3) {
-                System.out.println("Introduceti adresa de emai:");
+                System.out.println("Introduceti adresa de email:");
                 String newEmail = sc.nextLine();
                 found.setEmail(newEmail);
             }
@@ -177,11 +219,14 @@ public class Main {
                 String newPhone = sc.nextLine();
                 found.setPhoneNumber(newPhone);
             }
+        } else {
+            System.out.println("No match found");
         }
 
     }
 
     private static void searchList(Scanner sc, GuestsList list) {
+        System.out.println("Tasteaza termenul de cautare:");
         String word = sc.nextLine();
         List<Guest> matches = list.partialSearch(word);
         if (matches.isEmpty()){
